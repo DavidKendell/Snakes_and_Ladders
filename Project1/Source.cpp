@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include <iomanip>
 
 void printBoard(char board[100], int p1, int p2);
