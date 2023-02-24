@@ -3,7 +3,7 @@
 #include <iomanip>
 
 void printBoard(char board[100], int p1, int p2);
-int newPos(char board[100], int startPos, int roll);
+int newPos(char board[100], int currentPos, int roll);
 
 int main() {
 	char board[100] = { 100, 99, 101, 97, 102, 95, 94, 93, 92, 91,
@@ -20,7 +20,7 @@ int main() {
 	
 	int dice;
 	bool player1turn = true;
-	char ch = 'p';
+	char ch = 'p'; //A letter which isn't q
 	srand(time(nullptr));
 	while (ch != 'q') {
 		int player1pos = 90;
@@ -97,41 +97,41 @@ void printBoard(char board[100], int p1, int p2) {
 	std::cout << "\n\n";
 }
 
-int newPos(char board[100], int startPos, int roll) {
-	int direction = (startPos / 10) % 2 == 0 ? -1 : 1; //Left or right
-	int wrapAround = (startPos % 10) + direction * (roll % 10); //Go up
-	if (startPos - roll < 0) {
-		return startPos;
+int newPos(char board[100], int currentPos, int roll) {
+	int direction = (currentPos / 10) % 2 == 0 ? -1 : 1; //Left or right
+	int wrapAround = (currentPos % 10) + direction * (roll % 10); //Go up
+	if (currentPos - roll < 0) {
+		return currentPos;
 	}
 	else if (wrapAround < 0) { //going left
-		startPos += (startPos % 10) * direction; //Go to edge of board
-		roll -= startPos % 10; //remaining spaces to move
-		startPos -= 10; //go up one square
+		currentPos += (currentPos % 10) * direction; //Go to edge of board
+		roll -= currentPos % 10; //remaining spaces to move
+		currentPos -= 10; //go up one square
 		--roll; //one less squares to move after moving up
 		direction = -direction; //now going right 
-		startPos += roll * direction; //move rest of the way
+		currentPos += roll * direction; //move rest of the way
 	}
 	else if (wrapAround >= 10) { //going right
-		startPos += ((10 - startPos % 10) - 1) * direction; //go to edge of board
-		roll -= (10 - startPos % 10) - 1; // remaining spaces to move
-		startPos -= 10; //go up one square
+		currentPos += ((10 - currentPos % 10) - 1) * direction; //go to edge of board
+		roll -= (10 - currentPos % 10) - 1; // remaining spaces to move
+		currentPos -= 10; //go up one square
 		--roll; //one less squares to move after moving up
 		direction = -direction; // now going left
-		startPos += roll * direction; //move rest of the way
+		currentPos += roll * direction; //move rest of the way
 	}
 	else {
-		startPos += roll * direction; //no going up, simply move
+		currentPos += roll * direction; //no going up, simply move
 	}
-	if (board[startPos] > 100) {
+	if (board[currentPos] > 100) {
 		int i = 0;
-		while (i < 100 && board[i] != board[startPos] || i == startPos) ++i;
-		bool isSnakeHead = i > startPos && (int)(board[startPos]) % 2 == 0; /*landed in snake's mouth. 
+		while (i < 100 && board[i] != board[currentPos] || i == currentPos) ++i;
+		bool isSnakeHead = i > currentPos && (int)(board[currentPos]) % 2 == 0; /*landed in snake's mouth. 
 		Snakes represented with even numbers in board*/ 
 		if (isSnakeHead) std::cout << "SNAKE! SNAKE! SNAKE!\n"; //AAAAAAAAAHHHH
-		bool isLadderStart = i < startPos && (int)(board[startPos]) % 2 == 1; //similar for ladders with odd numbers
+		bool isLadderStart = i < currentPos && (int)(board[currentPos]) % 2 == 1; //similar for ladders with odd numbers
 		if (isSnakeHead || isLadderStart) {
-			startPos = i;
+			currentPos = i;
 		}
 	}
-	return startPos;
+	return currentPos;
 }
