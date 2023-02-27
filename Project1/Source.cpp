@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <iomanip>
+#include <chrono>
+#include <thread>
 
 void printBoard(char board[100], int p1, int p2);
 int newPos(char board[100], int currentPos, int roll);
@@ -30,8 +32,21 @@ int main() {
 			std::cout << "Player " << (player1turn ? 'A' : 'B') << " to roll\n";
 			std::cout << "Roll the dice! (press enter)\n";
 			std::cin.ignore();
+			int numRolls = 3 + rand() % 6;
 			dice = rand() % 6 + 1;
-			std::cout << "You rolled a " << dice << '\n';
+			for (int i = 0; i <= numRolls; ++i) {
+				int currRoll = rand() % 4 + 1;
+				if (currRoll >= dice || currRoll >= 7 - dice) {
+					++currRoll;
+				}
+				if (currRoll >= std::max(dice, 7 - dice)) {
+					++currRoll;
+				}
+				dice = currRoll;
+				std::cout << dice << ' ' << std::flush;
+				std::this_thread::sleep_for(std::chrono::milliseconds(30 * (long long) exp(3.5 * i / numRolls)));
+			}
+			std::cout << "\nYou rolled a " << dice << '\n';
 
 			
 			if (player1turn) {
@@ -127,3 +142,4 @@ int newPos(char board[100], int currentPos, int roll) {
 	}
 	return currentPos;
 }
+
