@@ -104,9 +104,9 @@ int newPos(char board[100], int currentPos, int roll) {
 		currentPos += roll; 
 	}
 	else if (wrapAround >= 10) { //going right
-		int change = ((10 - currentPos % 10) - 1);
-		currentPos += change;
-		roll -= change;
+		int distToEdge = ((10 - currentPos % 10) - 1);
+		currentPos += distToEdge;
+		roll -= distToEdge;
 		currentPos -= 10;
 		--roll;
 		currentPos -= roll; 
