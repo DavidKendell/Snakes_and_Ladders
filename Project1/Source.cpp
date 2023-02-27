@@ -37,14 +37,14 @@ int main() {
 			if (player1turn) {
 				int newPosition = newPos(board, player1pos, dice);
 				if (newPosition == player1pos) {
-					std::cout << "Player one rolled " << dice - player1pos << " too high! They forfeit their turn!\n";
+					std::cout << "Player A rolled " << dice - player1pos << " too high! They forfeit their turn!\n";
 				}
 				player1pos = newPosition;
 			}
 			else {
 				int newPosition = newPos(board, player2pos, dice);
 				if (newPosition == player2pos) {
-					std::cout << "Player one rolled " << dice - player2pos << " too high! They forfeit their turn!\n";
+					std::cout << "Player B rolled " << dice - player2pos << " too high! They forfeit their turn!\n";
 				}
 				player2pos = newPosition;
 
