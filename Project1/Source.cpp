@@ -35,10 +35,19 @@ int main() {
 
 			
 			if (player1turn) {
-				player1pos = newPos(board, player1pos, dice);
+				int newPosition = newPos(board, player1pos, dice);
+				if (newPosition == player1pos) {
+					std::cout << "Player one rolled " << dice - player1pos << " too high! They forfeit their turn!\n";
+				}
+				player1pos = newPosition;
 			}
 			else {
-				player2pos = newPos(board, player2pos, dice);
+				int newPosition = newPos(board, player2pos, dice);
+				if (newPosition == player2pos) {
+					std::cout << "Player one rolled " << dice - player2pos << " too high! They forfeit their turn!\n";
+				}
+				player2pos = newPosition;
+
 			}
 			player1turn = !player1turn;
 			printBoard(board, player1pos, player2pos);
@@ -64,33 +73,15 @@ void printBoard(char board[100], int p1, int p2) {
 		else if (i == p2) {
 			std::cout << "B";
 		}
+		else if (board[i] <= 100) {
+			std::cout << (int)board[i];
+		}
 
 		else {
-			switch (board[i]) {
-			case 101:
-				std::cout << "L1";
-				break;
-			case 102:
-				std::cout << "S1";
-				break;
-			case 103:
-				std::cout << "L2";
-				break;
-			case 104:
-				std::cout << "S2";
-				break;
-			case 105:
-				std::cout << "L3";
-				break;
-			case 106:
-				std::cout << "S4";
-				break;
-			case 107:
-				std::cout << "L3";
-				break;
-			default:
-				std::cout << (int)board[i];
-			}
+			char toPrint[3]{};
+			toPrint[0] = (board[i] % 2 == 1 ? 'L' : 'S');
+			toPrint[1] = '0' + ((int)board[i] - 99) / 2;
+			std::cout << toPrint;
 		}
 
 	}
@@ -98,27 +89,25 @@ void printBoard(char board[100], int p1, int p2) {
 }
 
 int newPos(char board[100], int currentPos, int roll) {
-	int direction = (currentPos / 10) % 2 == 0 ? -1 : 1; //Left or right
-	int wrapAround = (currentPos % 10) + direction * (roll % 10);
-	if (currentPos - roll < 0) {
+	int direction = (currentPos / 10) % 2 == 0 ? -1 : 1; // Left or right
+	// detects whether player gets to the edge of the board
+	int wrapAround = (currentPos % 10) + direction * (roll % 10); 
+	if (currentPos - roll < 0) { // close to winning but rolled too high
 		return currentPos;
 	}
-	else if (wrapAround < 0) {
+	else if (wrapAround < 0) { // going left
 		int distToEdge = (currentPos % 10);
-		currentPos -= distToEdge;
-		roll -= distToEdge % 10;
-		currentPos -= 10;
-		--roll;
+		currentPos -= distToEdge; // go to edge
+		roll -= distToEdge; // gone to edge, so decrease roll by distToEdge squares
+		currentPos -= 10; // go up
+		--roll; // one less space to move after going up
 		currentPos += roll; 
 	}
 	else if (wrapAround >= 10) { //going right
-		std::cout << currentPos;
 		int change = ((10 - currentPos % 10) - 1);
 		currentPos += change;
-		std::cout << currentPos;
 		roll -= change;
 		currentPos -= 10;
-		std::cout << currentPos;
 		--roll;
 		currentPos -= roll; 
 	}
