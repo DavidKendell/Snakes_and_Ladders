@@ -99,17 +99,17 @@ void printBoard(char board[100], int p1, int p2) {
 
 int newPos(char board[100], int currentPos, int roll) {
 	int direction = (currentPos / 10) % 2 == 0 ? -1 : 1; //Left or right
-	int wrapAround = (currentPos % 10) + direction * (roll % 10); //Go up
+	int wrapAround = (currentPos % 10) + direction * (roll % 10);
 	if (currentPos - roll < 0) {
 		return currentPos;
 	}
-	else if (wrapAround < 0) { //going left
+	else if (wrapAround < 0) {
 		int distToEdge = (currentPos % 10);
 		currentPos -= distToEdge;
-		roll -= distToEdge % 10; //remaining spaces to move
-		currentPos -= 10; //go up one square
-		--roll; //one less squares to move after moving up
-		currentPos += roll; //move rest of the way
+		roll -= distToEdge % 10;
+		currentPos -= 10;
+		--roll;
+		currentPos += roll; 
 	}
 	else if (wrapAround >= 10) { //going right
 		std::cout << currentPos;
@@ -119,11 +119,11 @@ int newPos(char board[100], int currentPos, int roll) {
 		roll -= change;
 		currentPos -= 10;
 		std::cout << currentPos;
-		--roll; //one less squares to move after moving up
-		currentPos -= roll; //move rest of the way
+		--roll;
+		currentPos -= roll; 
 	}
 	else {
-		currentPos += roll * direction; //no going up, simply move
+		currentPos += roll * direction; 
 	}
 	if (board[currentPos] > 100) {
 		int i = 0;
